@@ -107,7 +107,6 @@ jobs:
         # Optional but recommended
         # Defaults to "Apply automatic changes"
         commit_message: Update files for v${{ steps.sub.outputs.result }}
-        # token: ${{ secrets.FLATHUB_TOKEN }}
 
         # Optional options appended to `git-commit`
         # See https://git-scm.com/docs/git-commit for a list of available options
@@ -115,9 +114,9 @@ jobs:
 
         # Optional: Disable dirty check and always try to create a commit and push
         skip_dirty_check: true
-    # - name: Create PR
-    #   run: |
-    #     echo ${{ secrets.FLATHUB_TOKEN }} >> auth.txt
-    #     gh auth login --with-token < auth.txt
-    #     rm auth.txt
-    #     gh pr create --title "Release v${{ steps.sub.outputs.result }}" --body "This is an automated PR for the v${{ steps.sub.outputs.result }} release. This PR will be updated and merged once testing is complete."
+    - name: Create PR
+      run: |
+        echo ${{ secrets.FLATHUB_TOKEN }} >> auth.txt
+        gh auth login --with-token < auth.txt
+        rm auth.txt
+        gh pr create --title "Release v${{ steps.sub.outputs.result }}" --body "This is an automated PR for the v${{ steps.sub.outputs.result }} release. This PR will be updated and merged once testing is complete."
