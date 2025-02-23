@@ -19,9 +19,25 @@ jobs:
       with:
         repository: flathub/io.freetubeapp.FreeTube
         token: ${{ secrets.FLATHUB_TOKEN }}
-    - name: GitHub API exec action
+    - name: Get Repo Release List
       uses: moustacheful/github-api-exec-action@v0
-      id: api_results
+      id: list_results
+      with:
+        # Command to execute, (e.g: `pulls.create`), see https://octokit.github.io/rest.js/ for available commands
+        command: repos.listReleases
+        payload: >
+            {
+              "owner": "PrestonN",
+              "repo": "FreeTube"
+            }
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Echo List Information
+      run: |
+        echo ${{ fromJson(steps.list_results.outputs.result) }}
+    - name: Get Repo Release Information
+      uses: moustacheful/github-api-exec-action@v0
+      id: release_results
       with:
         # Command to execute, (e.g: `pulls.create`), see https://octokit.github.io/rest.js/ for available commands
         command: repos.getRelease
@@ -29,7 +45,7 @@ jobs:
             {
               "owner": "PrestonN",
               "repo": "FreeTube",
-              "release_id": ${{ secrets.UPLOAD_ID }}
+              "release_id": ${{ fromJson(steps.release_results.outputs.result).tag_name }}
             }
       env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -39,7 +55,7 @@ jobs:
       uses: bluwy/substitute-string-action@v3
       id: sub
       with:
-        _input-text: ${{ fromJson(steps.api_results.outputs.result).tag_name }}
+        _input-text: ${{ fromJson(steps.release_results.outputs.result).tag_name }}
         -beta: ''
         v: ''
     - name: Create Release Branch
