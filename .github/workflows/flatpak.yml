@@ -35,8 +35,8 @@ jobs:
     - name: Echo List Information
       run: |
         echo ${{ fromJson(steps.list_results.outputs.result) }}
-        echo ${{ steps.list_results.outputs.result[0] }}
-        echo ${{ fromJson(steps.list_results.outputs.result)[0] }}
+        echo ${{ steps.list_results.outputs.result }}
+        echo ${{ fromJson(steps.list_results.outputs.result[0]) }}
     - name: Install xmlstarlet
       run: sudo apt -y install xmlstarlet
     - name: Create Version Variable
