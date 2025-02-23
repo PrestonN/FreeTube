@@ -27,7 +27,7 @@ jobs:
         command: repos.listReleases
         payload: >
             {
-              "owner": "PrestonN",
+              "owner": "FreeTubeApp",
               "repo": "FreeTube"
             }
       env:
@@ -37,27 +37,13 @@ jobs:
         echo ${{ fromJson(steps.list_results.outputs.result) }}
         echo ${{ steps.list_results.outputs.result }}
         echo ${{ fromJson(steps.list_results.outputs.result)[0] }}
-    - name: Get Repo Release Information
-      uses: moustacheful/github-api-exec-action@v0
-      id: release_results
-      with:
-        # Command to execute, (e.g: `pulls.create`), see https://octokit.github.io/rest.js/ for available commands
-        command: repos.getRelease
-        payload: >
-            {
-              "owner": "PrestonN",
-              "repo": "FreeTube",
-              "release_id": ${{ fromJson(steps.release_results.outputs.result).tag_name }}
-            }
-      env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Install xmlstarlet
       run: sudo apt -y install xmlstarlet
     - name: Create Version Variable
       uses: bluwy/substitute-string-action@v3
       id: sub
       with:
-        _input-text: ${{ fromJson(steps.release_results.outputs.result).tag_name }}
+        _input-text: ${{ fromJson(steps.release_results.outputs.result)[0].tag_name }}
         -beta: ''
         v: ''
     - name: Create Release Branch
