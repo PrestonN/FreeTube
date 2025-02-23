@@ -27,7 +27,7 @@ jobs:
         command: repos.getRelease
         payload: >
             {
-              "owner": "FreeTubeApp",
+              "owner": "PrestonN",
               "repo": "FreeTube",
               "release_id": ${{ secrets.UPLOAD_ID }}
             }
