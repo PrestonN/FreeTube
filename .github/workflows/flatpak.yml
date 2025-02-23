@@ -38,7 +38,7 @@ jobs:
       uses: bluwy/substitute-string-action@v3
       id: sub
       with:
-        _input-text: ${{ fromJson(steps.release_results.outputs.result)[0].tag_name }}
+        _input-text: ${{ fromJson(steps.list_results.outputs.result)[0].tag_name }}
         -beta: ''
         v: ''
     - name: Create Release Branch
